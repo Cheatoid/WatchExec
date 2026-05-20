@@ -1,0 +1,89 @@
+name: .NET
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (example: 1.0.0)"
+        required: true
+        type: string
+
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Determine version from workflow dispatch
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        shell: bash
+        run: |
+          TAG="v${{ github.event.inputs.version }}"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git tag $TAG
+          git push origin $TAG
+
+      - name: Determine version from tag
+        if: ${{ github.event_name == 'push' }}
+        shell: bash
+        run: |
+          echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build -c Release --no-restore
+
+      - name: Publish framework-dependent release
+        run: dotnet publish -c Release --no-build --self-contained false -o publish
+
+      - name: Create archive
+        shell: bash
+        run: |
+          cd publish
+          zip -r "../WatchExec-${TAG}.zip" .
+          # 7z a "WatchExec-${TAG}.zip" ./publish/*
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: WatchExec
+          path: WatchExec-${{ env.TAG }}.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: "WatchExec ${{ env.TAG }}"
+          generate_release_notes: true
+          prerelease: ${{ contains(env.TAG, '-') }}
+          files: WatchExec-${{ env.TAG }}.zip
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

@@ -1,0 +1,79 @@
+# http://EditorConfig.org
+
+# Top-most EditorConfig file
+root = true
+
+# Default settings for all files
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = tab
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+
+# C# files
+[**.cs]
+indent_size = 2
+indent_style = tab
+
+
+# Markdown files
+[**.md]
+indent_size = 2
+indent_style = space
+
+
+# Solution files
+[**.{sln,slnf,slnx}]
+indent_size = 2
+indent_style = space
+
+
+# XML project files
+[**.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,nativeproj,locproj}]
+indent_size = 2
+indent_style = tab
+
+
+# XML config files
+[**.{xml,imxml,stylecop,props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
+indent_size = 2
+indent_style = tab
+
+
+# JSON files
+[**.json]
+indent_size = 2
+indent_style = space
+
+
+# TOML files
+[**.toml]
+indent_size = 2
+indent_style = space
+
+
+# YAML config files
+[**.{yml,yaml}]
+indent_size = 2
+indent_style = space
+
+
+# Powershell files
+[**.ps1]
+indent_size = 2
+indent_style = tab
+
+
+# Shell script files
+[**.sh]
+indent_size = 2
+indent_style = tab
+
+
+# Batch files
+[**.{bat,cmd}]
+indent_size = 2
+indent_style = tab

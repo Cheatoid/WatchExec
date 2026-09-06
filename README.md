@@ -187,14 +187,14 @@ Set custom environment variables for the spawned process. Token substitution is 
 }
 ```
 
-### Build Lux files
+### Build Nebra files
 
 ```json
 {
-  "name": "Lux Build",
+  "name": "Nebra Build",
   "path": "./src",
-  "regexPattern": ".*\\.lux$",
-  "command": "lux",
+  "regexPattern": ".*\\.neb$",
+  "command": "nebra",
   "arguments": ["build", "{fullpath}"]
 }
 ```

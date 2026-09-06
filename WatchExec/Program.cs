@@ -587,13 +587,13 @@ internal static class Program
 				},
 				new WatcherConfig
 				{
-					Name = "Lux Build",
+					Name = "Nebra Build",
 					Path = "src",
 					IncludeSubdirectories = true,
-					RegexPattern = @".*\.lux$",
+					RegexPattern = @".*\.neb$",
 					DebounceMilliseconds = 1000,
 					NotifyFilters = ["LastWrite"],
-					Command = "lux",
+					Command = "nebra",
 					Arguments = ["build", "{fullpath}"],
 					WaitForExit = true,
 					WorkingDirectory = "."
